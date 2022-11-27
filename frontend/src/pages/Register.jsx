@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { FaUserAlt } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from "react";
-import "react-toastify/dist/ReactToastify.css";
+import { FaUserAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { register, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,6 @@ function Register() {
   const { name, email, password, password2 } = formData;
 
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
   const { user, isLoading, isSuccess, isError, message } = useSelector(
@@ -30,14 +29,13 @@ function Register() {
       toast.error(message)
     }
 
-    //Redirect
-
-    if (isSuccess && user) {
+    // Redirect when logged in
+    if (isSuccess || user) {
       navigate('/')
     }
 
     dispatch(reset())
-  }, [isError,isSuccess,user,message,navigate,dispatch])
+  }, [isError, isSuccess, user, message, navigate, dispatch])
 
   //important
   const onChange = (e) => {
@@ -63,11 +61,15 @@ function Register() {
     }
   };
 
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <>
       <section className="heading">
         <h1>
-          <FaUserAlt /> Register {user}
+          <FaUserAlt /> Register
         </h1>
         <p>Please create an account</p>
       </section>
