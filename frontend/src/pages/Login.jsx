@@ -1,26 +1,25 @@
-import { useState, useEffect } from "react";
-import { FaSignInAlt } from "react-icons/fa";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { login, reset } from "../features/auth/authSlice";
-import Spinner from "../components/Spinner";
+import { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { FaSignInAlt } from 'react-icons/fa'
+import { useSelector, useDispatch } from 'react-redux'
+import { login, reset } from '../features/auth/authSlice'
+import Spinner from '../components/Spinner'
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+    email: '',
+    password: '',
+  })
 
-  const { email, password } = formData;
+  const { email, password } = formData
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const { user, isError, isLoading, isSuccess, message } = useSelector(
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
-  );
+  )
 
   useEffect(() => {
     if (isError) {
@@ -33,25 +32,25 @@ function Login() {
     }
 
     dispatch(reset())
-  }, [isError, isSuccess, user, message, navigate, dispatch])  
+  }, [isError, isSuccess, user, message, navigate, dispatch])
 
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
-    }));
-  };
+    }))
+  }
 
   const onSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const userData = {
       email,
       password,
-    };
+    }
 
-    dispatch(login(userData));
-  };
+    dispatch(login(userData))
+  }
 
   if (isLoading) {
     return <Spinner />
@@ -59,47 +58,46 @@ function Login() {
 
   return (
     <>
-      <section className="heading">
+      <section className='heading'>
         <h1>
           <FaSignInAlt /> Login
         </h1>
-        <p>Please Login to get support</p>
+        <p>Please log in to get support</p>
       </section>
 
-      <section className="form">
+      <section className='form'>
         <form onSubmit={onSubmit}>
-          <div className="form-group">
+          <div className='form-group'>
             <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              onChange={onChange}
+              type='email'
+              className='form-control'
+              id='email'
+              name='email'
               value={email}
-              required
-              placeholder="Enter your email"
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              className="form-control"
-              id="password"
               onChange={onChange}
-              name="password"
-              value={password}
-              placeholder="Enter your password"
+              placeholder='Enter your email'
               required
             />
           </div>
-
-          <div className="form-group">
-            <button className="btn btn-block">Login</button>
+          <div className='form-group'>
+            <input
+              type='password'
+              className='form-control'
+              id='password'
+              name='password'
+              value={password}
+              onChange={onChange}
+              placeholder='Enter password'
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <button className='btn btn-block'>Submit</button>
           </div>
         </form>
       </section>
     </>
-  );
+  )
 }
 
-export default Login;
+export default Login

@@ -1,38 +1,37 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import authService from "./authService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import authService from './authService'
 
-//Get user from local storage
-
-const user = JSON.parse(localStorage.getItem("user"));
+// Get user from localstorage
+const user = JSON.parse(localStorage.getItem('user'))
 
 const initialState = {
   user: user ? user : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: "",
-};
+  message: '',
+}
 
-//register new user
+// Register new user
 export const register = createAsyncThunk(
-  "auth/register",
+  'auth/register',
   async (user, thunkAPI) => {
     try {
-      return await authService.register(user);
+      return await authService.register(user)
     } catch (error) {
       const message =
         (error.response &&
           error.response.data &&
           error.response.data.message) ||
         error.message ||
-        error.toString();
+        error.toString()
 
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(message)
     }
   }
-);
+)
 
-//login user
+// Login user
 export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   try {
     return await authService.login(user)
@@ -46,20 +45,20 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   }
 })
 
-//logout user
+// Logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout()
 })
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     reset: (state) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.isSuccess = false;
-      state.message = "";
+      state.isLoading = false
+      state.isError = false
+      state.isSuccess = false
+      state.message = ''
     },
   },
   extraReducers: (builder) => {
@@ -96,7 +95,7 @@ export const authSlice = createSlice({
         state.user = null
       })
   },
-});
+})
 
-export const { reset } = authSlice.actions;
-export default authSlice.reducer;
+export const { reset } = authSlice.actions
+export default authSlice.reducer
